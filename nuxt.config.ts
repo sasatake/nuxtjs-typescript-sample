@@ -1,5 +1,7 @@
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 const pkg = require('./package')
+import { Configuration } from 'webpack'
+import { Context } from '@nuxt/vue-app'
 
 module.exports = {
   mode: 'universal',
@@ -67,9 +69,9 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {
+    extend(config: Configuration, ctx: Context) {
       // Run ESLint on save
-      if (ctx.isDev && ctx.isClient) {
+      if (ctx.isDev && ctx.isClient && config.module) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
