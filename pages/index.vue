@@ -39,7 +39,9 @@
             more exciting features in the future.
           </p>
           <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
+            <em>
+              <small>&mdash; John Leider</small>
+            </em>
           </div>
           <hr class="my-3" />
           <a href="https://nuxtjs.org/" target="_blank">Nuxt Documentation</a>
@@ -57,14 +59,16 @@
   </v-layout>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
-export default {
+@Component({
   components: {
     Logo,
     VuetifyLogo
   }
-}
+})
+export default class Index extends Vue {}
 </script>

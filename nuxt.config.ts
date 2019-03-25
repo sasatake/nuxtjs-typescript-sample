@@ -79,5 +79,5 @@ module.exports = {
       }
     }
   },
-  serverMiddleware: [{ path: '/api', handler: '~/server/middleware/index.js' }]
+  serverMiddleware: [{ path: '/api', handler: '~/server/middleware/index.ts' }]
 }

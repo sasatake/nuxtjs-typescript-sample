@@ -5,7 +5,7 @@ const { Nuxt, Builder } = require('nuxt')
 
 async function start() {
   // Require nuxt config
-  const config = require('../nuxt.config.js')
+  const config = require('../nuxt.config.ts')
 
   // Create a new nuxt instance
   const nuxt = new Nuxt(config)
