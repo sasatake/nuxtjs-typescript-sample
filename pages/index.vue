@@ -1,47 +1,84 @@
 <template>
   <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <v-card>
-        <v-card-title class="headline">User List</v-card-title>
-        <v-card-text>
-          <v-list>
-            <v-list-tile v-for="item in items" :key="item.title" avatar>
-              <v-list-tile-avatar>
-                <img :src="item.avatar" />
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title v-text="item.title"></v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </v-card-text>
-      </v-card>
-    </v-flex>
+    <v-card>
+      <v-card-title primary-title>
+        <div class="headline">User List</div>
+      </v-card-title>
+
+      <v-data-table :headers="headers" :items="users" hide-actions>
+        <template v-slot:items="props">
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.email }}</td>
+          <td>{{ props.item.city }}</td>
+          <td>{{ props.item.avatar }}</td>
+          <td>{{ props.item.updatedAt }}</td>
+        </template>
+      </v-data-table>
+    </v-card>
   </v-layout>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
 
-interface Items {
-  title: string;
+interface Header {
+  text: string;
+  value: string;
+}
+
+interface User {
+  name: string;
+  city: string;
+  email: string;
   avatar: string;
+  updatedAt: Date;
 }
 
 @Component
 export default class Index extends Vue {
-  items: Items[] = [
+  headers: Header[] = [
     {
-      title: 'test01',
-      avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+      text: 'Name',
+      value: 'name'
     },
     {
-      title: 'test02',
-      avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg'
+      text: 'Email',
+      value: 'mail'
     },
     {
-      title: 'test03',
-      avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
+      text: 'City',
+      value: 'city'
+    },
+    {
+      text: 'Avatar',
+      value: 'avatar'
+    },
+    {
+      text: 'UpdatedAt',
+      value: 'updatedAt'
+    }
+  ];
+  users: User[] = [
+    {
+      name: 'test01',
+      city: 'Tokyo',
+      email: 'test01@mail.co.jp',
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+      updatedAt: new Date()
+    },
+    {
+      name: 'test02',
+      city: 'New York',
+      email: 'test02@mail.co.jp',
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+      updatedAt: new Date()
+    },
+    {
+      name: 'test03',
+      city: 'London',
+      email: 'test03@mail.co.jp',
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+      updatedAt: new Date()
     }
   ];
 }
