@@ -12,6 +12,11 @@
           <td>{{ props.item.city }}</td>
           <td>{{ props.item.avatar }}</td>
           <td>{{ props.item.updatedAt }}</td>
+          <td>
+            <v-icon small @click="alertUser(props.item.name)">
+              announcement
+            </v-icon>
+          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -56,30 +61,19 @@ export default class Index extends Vue {
     {
       text: 'UpdatedAt',
       value: 'updatedAt'
-    }
-  ];
-  users: User[] = [
-    {
-      name: 'test01',
-      city: 'Tokyo',
-      email: 'test01@mail.co.jp',
-      avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-      updatedAt: new Date()
     },
     {
-      name: 'test02',
-      city: 'New York',
-      email: 'test02@mail.co.jp',
-      avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-      updatedAt: new Date()
-    },
-    {
-      name: 'test03',
-      city: 'London',
-      email: 'test03@mail.co.jp',
-      avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-      updatedAt: new Date()
+      text: 'Announcement',
+      value: 'announcement'
     }
   ];
+
+  get users(): User[] {
+    return this.$store.state.user.users;
+  }
+
+  alertUser(name): void {
+    alert(name);
+  }
 }
 </script>
