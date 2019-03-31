@@ -1,7 +1,7 @@
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
-const pkg = require('./package')
-import { Configuration } from 'webpack'
-import { Context } from '@nuxt/vue-app'
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const pkg = require('./package');
+import { Configuration } from 'webpack';
+import { Context } from '@nuxt/vue-app';
 
 module.exports = {
   mode: 'universal',
@@ -39,7 +39,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/vuetify'],
+  plugins: ['@/plugins/vuetify', '@/plugins/filter'],
 
   /*
    ** Nuxt.js modules
@@ -77,9 +77,9 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        })
+        });
       }
     }
   },
   serverMiddleware: [{ path: '/api', handler: '~/server/middleware/index.ts' }]
-}
+};

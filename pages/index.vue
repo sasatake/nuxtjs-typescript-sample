@@ -11,7 +11,7 @@
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.city }}</td>
           <td>{{ props.item.avatar }}</td>
-          <td>{{ props.item.updatedAt }}</td>
+          <td>{{ props.item.updatedAt | dateTime }}</td>
           <td>
             <v-icon small @click="alertUser(props.item.name)">
               announcement
