@@ -1,10 +1,4 @@
-interface User {
-  name: string;
-  city: string;
-  email: string;
-  avatar: string;
-  updatedAt: Date;
-}
+import { User } from '@/types/models';
 
 const users: User[] = [
   {

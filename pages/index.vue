@@ -25,18 +25,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
+import { User } from '@/types/models';
 
 interface Header {
   text: string;
   value: string;
-}
-
-interface User {
-  name: string;
-  city: string;
-  email: string;
-  avatar: string;
-  updatedAt: Date;
 }
 
 @Component
