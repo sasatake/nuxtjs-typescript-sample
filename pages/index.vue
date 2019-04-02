@@ -4,7 +4,6 @@
       <v-card-title primary-title>
         <div class="headline">User List</div>
       </v-card-title>
-
       <v-data-table :headers="headers" :items="users" hide-actions>
         <template v-slot:items="props">
           <td>
@@ -18,7 +17,12 @@
           <td>{{ props.item.updatedAt | dateTime }}</td>
           <td>
             <v-icon small @click="alertUser(props.item.name)">
-              announcement
+              edit
+            </v-icon>
+          </td>
+          <td>
+            <v-icon small @click="alertUser(props.item.name)">
+              delete
             </v-icon>
           </td>
         </template>
@@ -60,8 +64,12 @@ export default class Index extends Vue {
       value: 'updatedAt'
     },
     {
-      text: 'Announcement',
-      value: 'announcement'
+      text: 'Edit',
+      value: 'edit'
+    },
+    {
+      text: 'Delete',
+      value: 'delete'
     }
   ];
 
