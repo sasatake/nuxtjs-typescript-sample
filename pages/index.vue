@@ -7,10 +7,14 @@
 
       <v-data-table :headers="headers" :items="users" hide-actions>
         <template v-slot:items="props">
+          <td>
+            <v-avatar size="36px">
+              <img :src="props.item.avatar" />
+            </v-avatar>
+          </td>
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.city }}</td>
-          <td>{{ props.item.avatar }}</td>
           <td>{{ props.item.updatedAt | dateTime }}</td>
           <td>
             <v-icon small @click="alertUser(props.item.name)">
@@ -36,6 +40,10 @@ interface Header {
 export default class Index extends Vue {
   headers: Header[] = [
     {
+      text: 'Icon',
+      value: 'icon'
+    },
+    {
       text: 'Name',
       value: 'name'
     },
@@ -46,10 +54,6 @@ export default class Index extends Vue {
     {
       text: 'City',
       value: 'city'
-    },
-    {
-      text: 'Avatar',
-      value: 'avatar'
     },
     {
       text: 'UpdatedAt',
