@@ -1,4 +1,9 @@
+import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
 import { User } from '@/types/models';
+
+interface UserState {
+  users: User[];
+}
 
 const users: User[] = [
   {
@@ -24,6 +29,13 @@ const users: User[] = [
   }
 ];
 
-export const state = () => {
-  return { users: users };
+export const state = (): UserState => ({ users: users });
+
+export const mutations = <MutationTree<UserState>>{
+  deleteUser(state: UserState, userName: string): void {
+    const index: number = state.users.findIndex(
+      (u: User): boolean => u.name == userName
+    );
+    state.users.splice(index, 1);
+  }
 };

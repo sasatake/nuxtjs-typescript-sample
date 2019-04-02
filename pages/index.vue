@@ -21,7 +21,7 @@
             </v-icon>
           </td>
           <td>
-            <v-icon small @click="alertUser(props.item.name)">
+            <v-icon small @click="deleteUser(props.item.name)">
               delete
             </v-icon>
           </td>
@@ -77,8 +77,12 @@ export default class Index extends Vue {
     return this.$store.state.user.users;
   }
 
-  alertUser(name): void {
+  alertUser(name: string): void {
     alert(name);
+  }
+
+  deleteUser(name: string): void {
+    this.$store.commit('user/deleteUser', name);
   }
 }
 </script>
