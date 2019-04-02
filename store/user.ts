@@ -24,6 +24,6 @@ const users: User[] = [
   }
 ];
 
-export const state = function() {
+export const state = () => {
   return { users: users };
 };
