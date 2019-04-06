@@ -27,6 +27,9 @@
           </td>
         </template>
       </v-data-table>
+      <v-btn absolute dark fab top right color="pink">
+        <v-icon>add</v-icon>
+      </v-btn>
     </v-card>
   </v-layout>
 </template>
@@ -82,7 +85,7 @@ export default class Index extends Vue {
   }
 
   deleteUser(name: string): void {
-    this.$store.commit('user/deleteUser', name);
+    this.$store.dispatch('user/deleteUser', name);
   }
 }
 </script>
