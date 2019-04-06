@@ -39,3 +39,9 @@ export const mutations = <MutationTree<UserState>>{
     state.users.splice(index, 1);
   }
 };
+
+export const actions = <ActionTree<UserState, any>>{
+  deleteUser(store: ActionContext<UserState, any>, userName: string) {
+    store.commit('deleteUser', userName);
+  }
+};
