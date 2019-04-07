@@ -1,9 +1,6 @@
-import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
+import { MutationTree, ActionTree, ActionContext } from 'vuex';
 import { User } from '@/types/models';
-
-interface UserState {
-  users: User[];
-}
+import { UserState } from '@/types/store';
 
 const users: User[] = [
   {
