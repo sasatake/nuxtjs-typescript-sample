@@ -4,7 +4,7 @@
       <v-card-title primary-title>
         <div class="headline">User List</div>
       </v-card-title>
-      <v-data-table :headers="headers" :items="users" hide-actions>
+      <v-data-table :headers="headers" :items="user.users" hide-actions>
         <template v-slot:items="props">
           <td>
             <v-avatar size="36px">
@@ -36,7 +36,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import { User } from '@/types/models';
+import { State } from 'vuex-class';
+import { UserState } from '@/types/store';
 
 interface Header {
   text: string;
@@ -76,9 +77,7 @@ export default class Index extends Vue {
     }
   ];
 
-  get users(): User[] {
-    return this.$store.state.user.users;
-  }
+  @State user!: UserState;
 
   alertUser(name: string): void {
     alert(name);
