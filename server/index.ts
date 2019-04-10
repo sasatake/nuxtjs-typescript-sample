@@ -1,39 +1,39 @@
-const micro = require('micro')
-const consola = require('consola')
-const dispatch = require('micro-route/dispatch')
-const { Nuxt, Builder } = require('nuxt')
+const micro = require('micro');
+const consola = require('consola');
+const dispatch = require('micro-route/dispatch');
+const { Nuxt, Builder } = require('nuxt');
 
 async function start() {
   // Require nuxt config
-  const config = require('../nuxt.config.ts')
+  const config = require('../nuxt.config.ts');
 
   // Create a new nuxt instance
-  const nuxt = new Nuxt(config)
+  const nuxt = new Nuxt(config);
 
   // Enable live build & reloading on dev
   if (nuxt.options.dev) {
-    await new Builder(nuxt).build()
+    await new Builder(nuxt).build();
   } else {
-    await nuxt.ready()
+    await nuxt.ready();
   }
 
   const server = micro(async (req, res) => {
     await dispatch().dispatch('*', ['GET'], (req, res) =>
       nuxt.render(req, res)
-    )(req, res)
-  })
+    )(req, res);
+  });
 
   const {
     host = process.env.HOST || '127.0.0.1',
     port = process.env.PORT || 3000
-  } = nuxt.options.server
+  } = nuxt.options.server;
 
   // Listen the server
-  server.listen(port, host)
+  server.listen(port, host);
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true
-  })
+  });
 }
 
-start()
+start();
