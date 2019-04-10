@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { UserState } from '@/types/store';
 
 interface Header {
@@ -79,12 +79,10 @@ export default class Index extends Vue {
 
   @State user!: UserState;
 
+  @Action('user/deleteUser') deleteUser!: (name: string) => void;
+
   alertUser(name: string): void {
     alert(name);
-  }
-
-  deleteUser(name: string): void {
-    this.$store.dispatch('user/deleteUser', name);
   }
 }
 </script>
