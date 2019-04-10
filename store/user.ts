@@ -31,7 +31,7 @@ export const state = (): UserState => ({ users: users });
 export const mutations = <MutationTree<UserState>>{
   deleteUser(state: UserState, userName: string): void {
     const index: number = state.users.findIndex(
-      (u: User): boolean => u.name == userName
+      (u: User): boolean => u.name === userName
     );
     state.users.splice(index, 1);
   }
