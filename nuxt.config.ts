@@ -1,7 +1,7 @@
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
-const pkg = require('./package');
+import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin';
 import { Configuration } from 'webpack';
 import { Context } from '@nuxt/vue-app';
+const pkg = require('./package');
 
 module.exports = {
   mode: 'universal',
@@ -74,7 +74,7 @@ module.exports = {
       if (ctx.isDev && ctx.isClient && config.module) {
         config.module.rules.push({
           enforce: 'pre',
-          test: /\.(js|vue)$/,
+          test: /\.(ts|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         });

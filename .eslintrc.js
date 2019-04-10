@@ -5,7 +5,7 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@typescript-eslint/parser',
     ecmaFeatures: {
       legacyDecorators: true
     }
@@ -17,9 +17,10 @@ module.exports = {
     'prettier',
     'prettier/vue'
   ],
-  plugins: ['prettier'],
+  plugins: ['prettier', '@typescript-eslint'],
   // add your custom rules here
   rules: {
-    'nuxt/no-cjs-in-config': 'off'
+    'nuxt/no-cjs-in-config': 'off',
+    '@typescript-eslint/no-unused-vars': 'error'
   }
-}
+};
