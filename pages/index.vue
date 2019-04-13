@@ -44,31 +44,52 @@
     <v-layout>
       <v-dialog v-model="dialog" persistent max-width="50%">
         <v-card>
-          <v-card-title class="headline">Create User</v-card-title>
-          <v-card-text>
-            <v-container grid-list-xs>
-              <v-layout wrap>
-                <v-flex xs6>
-                  <v-text-field label="First Name" required></v-text-field>
-                </v-flex>
-                <v-flex xs6>
-                  <v-text-field label="Last Name" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Email" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-select :items="cities" label="City"></v-select>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat="flat" @click="dialog = false">
-              Create
-            </v-btn>
-          </v-card-actions>
+          <v-form>
+            <v-card-title class="headline">Create User</v-card-title>
+            <v-card-text>
+              <v-container grid-list-xs>
+                <v-layout wrap>
+                  <v-flex xs6>
+                    <v-text-field
+                      v-model="form.firstName"
+                      label="First Name"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs6>
+                    <v-text-field
+                      v-model="form.lastName"
+                      label="Last Name"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field
+                      v-model="form.email"
+                      label="Email"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-select
+                      v-model="form.city"
+                      :items="cities"
+                      label="City"
+                    ></v-select>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn @click="dialog = false">
+                <v-icon small>clear</v-icon>&thinsp;Cancel
+              </v-btn>
+              <v-btn color="success" @click="createUser">
+                <v-icon small>person_add</v-icon>&thinsp;Create
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-layout>
@@ -83,6 +104,13 @@ import { UserState } from '@/types/store';
 interface Header {
   text: string;
   value: string;
+}
+
+interface Form {
+  firstName: string;
+  lastName: string;
+  email: string;
+  city: string;
 }
 
 @Component
@@ -118,6 +146,13 @@ export default class Index extends Vue {
     }
   ];
 
+  form: Form = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    city: ''
+  };
+
   dialog: boolean = false;
 
   cities: Array<string> = ['Tokyo', 'Osaka', 'New York', 'London'];
@@ -128,6 +163,16 @@ export default class Index extends Vue {
 
   alertUser(name: string): void {
     alert(name);
+  }
+
+  createUser(): void {
+    const debugMessage: string = `
+      firstName: ${this.form.firstName}
+      lastName: ${this.form.lastName}
+      email: ${this.form.email}
+      city: ${this.form.city}
+    `;
+    alert(debugMessage);
   }
 }
 </script>
