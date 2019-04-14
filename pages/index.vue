@@ -51,28 +51,39 @@
                 <v-layout wrap>
                   <v-flex xs6>
                     <v-text-field
-                      v-model="form.firstName"
+                      v-model="firstName"
+                      :counter="10"
+                      :error-messages="getFirstNameErrors"
                       label="First Name"
                       required
+                      @input="$v.firstName.$touch()"
+                      @blur="$v.firstName.$touch()"
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs6>
                     <v-text-field
-                      v-model="form.lastName"
+                      v-model="lastName"
+                      :counter="10"
+                      :error-messages="getLastNameErrors"
                       label="Last Name"
                       required
+                      @input="$v.lastName.$touch()"
+                      @blur="$v.lastName.$touch()"
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12>
                     <v-text-field
-                      v-model="form.email"
+                      v-model="email"
+                      :error-messages="getEmailErrors"
                       label="Email"
                       required
+                      @input="$v.email.$touch()"
+                      @blur="$v.email.$touch()"
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12>
                     <v-select
-                      v-model="form.city"
+                      v-model="city"
                       :items="cities"
                       label="City"
                     ></v-select>
@@ -100,6 +111,7 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 import { State, Action } from 'vuex-class';
 import { UserState } from '@/types/store';
+import { required, maxLength, email } from 'vuelidate/lib/validators';
 
 interface Header {
   text: string;
@@ -113,7 +125,13 @@ interface Form {
   city: string;
 }
 
-@Component
+@Component({
+  validations: {
+    firstName: { required, maxLength: maxLength(10) },
+    lastName: { required, maxLength: maxLength(10) },
+    email: { required, email }
+  }
+})
 export default class Index extends Vue {
   headers: Header[] = [
     {
@@ -146,12 +164,51 @@ export default class Index extends Vue {
     }
   ];
 
-  form: Form = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    city: ''
-  };
+  firstName: string = '';
+  lastName: string = '';
+  email: string = '';
+  city: string = '';
+
+  get getFirstNameErrors(): Array<string> {
+    const errors: Array<string> = [];
+    const validation = this.$v.firstName;
+
+    if (validation) {
+      if (!validation.$dirty) return errors;
+      !validation['maxLength'] &&
+        errors.push('FirstName must be 10 characters.');
+      !validation['required'] && errors.push('FirstName is required.');
+    }
+
+    return errors;
+  }
+
+  get getLastNameErrors(): Array<string> {
+    const errors: Array<string> = [];
+    const validation = this.$v.lastName;
+
+    if (validation) {
+      if (!validation.$dirty) return errors;
+      !validation['maxLength'] &&
+        errors.push('LastName must be 10 characters.');
+      !validation['required'] && errors.push('LastName is required.');
+    }
+
+    return errors;
+  }
+
+  get getEmailErrors(): Array<string> {
+    const errors: Array<string> = [];
+    const validation = this.$v.email;
+
+    if (validation) {
+      if (!validation.$dirty) return errors;
+      !validation['email'] && errors.push('email must be valid format.');
+      !validation['required'] && errors.push('email is required.');
+    }
+
+    return errors;
+  }
 
   dialog: boolean = false;
 
@@ -167,10 +224,10 @@ export default class Index extends Vue {
 
   createUser(): void {
     const debugMessage: string = `
-      firstName: ${this.form.firstName}
-      lastName: ${this.form.lastName}
-      email: ${this.form.email}
-      city: ${this.form.city}
+      firstName: ${this.firstName}
+      lastName: ${this.lastName}
+      email: ${this.email}
+      city: ${this.city}
     `;
     alert(debugMessage);
   }
