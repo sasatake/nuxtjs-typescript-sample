@@ -85,7 +85,11 @@
                     <v-select
                       v-model="city"
                       :items="cities"
+                      :error-messages="getCityErrors"
                       label="City"
+                      required
+                      @input="$v.city.$touch()"
+                      @blur="$v.city.$touch()"
                     ></v-select>
                   </v-flex>
                 </v-layout>
@@ -93,10 +97,10 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn @click="dialog = false">
+              <v-btn @click="clear">
                 <v-icon small>clear</v-icon>&thinsp;Cancel
               </v-btn>
-              <v-btn color="success" @click="createUser">
+              <v-btn color="success" @click="submit">
                 <v-icon small>person_add</v-icon>&thinsp;Create
               </v-btn>
             </v-card-actions>
@@ -129,7 +133,8 @@ interface Form {
   validations: {
     firstName: { required, maxLength: maxLength(10) },
     lastName: { required, maxLength: maxLength(10) },
-    email: { required, email }
+    email: { required, email },
+    city: { required }
   }
 })
 export default class Index extends Vue {
@@ -164,10 +169,13 @@ export default class Index extends Vue {
     }
   ];
 
+  cities: Array<string> = ['Tokyo', 'Osaka', 'New York', 'London'];
+  dialog: boolean = false;
+
   firstName: string = '';
   lastName: string = '';
   email: string = '';
-  city: string = '';
+  city: string | null = null;
 
   get getFirstNameErrors(): Array<string> {
     const errors: Array<string> = [];
@@ -210,9 +218,17 @@ export default class Index extends Vue {
     return errors;
   }
 
-  dialog: boolean = false;
+  get getCityErrors(): Array<string> {
+    const errors: Array<string> = [];
+    const validation = this.$v.city;
 
-  cities: Array<string> = ['Tokyo', 'Osaka', 'New York', 'London'];
+    if (validation) {
+      if (!validation.$dirty) return errors;
+      !validation['required'] && errors.push('city is required.');
+    }
+
+    return errors;
+  }
 
   @State user!: UserState;
 
@@ -222,14 +238,27 @@ export default class Index extends Vue {
     alert(name);
   }
 
-  createUser(): void {
-    const debugMessage: string = `
+  submit(): void {
+    this.$v.$touch();
+
+    if (!this.$v.$invalid) {
+      const debugMessage: string = `
       firstName: ${this.firstName}
       lastName: ${this.lastName}
       email: ${this.email}
       city: ${this.city}
     `;
-    alert(debugMessage);
+      alert(debugMessage);
+    }
+  }
+
+  clear(): void {
+    this.$v.$reset();
+    this.firstName = '';
+    this.lastName = '';
+    this.email = '';
+    this.city = null;
+    this.dialog = false;
   }
 }
 </script>
