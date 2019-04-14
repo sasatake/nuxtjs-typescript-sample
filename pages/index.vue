@@ -9,7 +9,8 @@
           <template v-slot:items="props">
             <td>
               <v-avatar size="36px">
-                <img :src="props.item.avatar" />
+                <img v-if="props.item.avatar" :src="props.item.avatar" />
+                <v-icon v-else large>account_circle</v-icon>
               </v-avatar>
             </td>
             <td>{{ props.item.name }}</td>
@@ -116,6 +117,7 @@ import { Component, Vue } from 'nuxt-property-decorator';
 import { State, Action } from 'vuex-class';
 import { UserState } from '@/types/store';
 import { required, maxLength, email } from 'vuelidate/lib/validators';
+import { User } from '@/types/models';
 
 interface Header {
   text: string;
@@ -234,6 +236,8 @@ export default class Index extends Vue {
 
   @Action('user/deleteUser') deleteUser!: (name: string) => void;
 
+  @Action('user/createUser') createUser!: (user: User) => void;
+
   alertUser(name: string): void {
     alert(name);
   }
@@ -242,13 +246,15 @@ export default class Index extends Vue {
     this.$v.$touch();
 
     if (!this.$v.$invalid) {
-      const debugMessage: string = `
-      firstName: ${this.firstName}
-      lastName: ${this.lastName}
-      email: ${this.email}
-      city: ${this.city}
-    `;
-      alert(debugMessage);
+      const newUser: User = {
+        name: `${this.firstName} ${this.lastName}`,
+        city: this.city ? this.city : '',
+        email: this.email,
+        avatar: '',
+        updatedAt: new Date()
+      };
+      this.createUser(newUser);
+      this.clear();
     }
   }
 
