@@ -34,11 +34,17 @@ export const mutations = <MutationTree<UserState>>{
       (u: User): boolean => u.name === userName
     );
     state.users.splice(index, 1);
+  },
+  createUser(state: UserState, user: User): void {
+    state.users.push(user);
   }
 };
 
 export const actions = <ActionTree<UserState, any>>{
   deleteUser(store: ActionContext<UserState, any>, userName: string) {
     store.commit('deleteUser', userName);
+  },
+  createUser(store: ActionContext<UserState, any>, user: User) {
+    store.commit('createUser', user);
   }
 };
