@@ -10,7 +10,7 @@
                 <v-text-field
                   v-model="firstName"
                   :counter="10"
-                  :error-messages="getFirstNameErrors"
+                  :error-messages="getErrors('firstName')"
                   label="First Name"
                   required
                   @input="$v.firstName.$touch()"
@@ -21,7 +21,7 @@
                 <v-text-field
                   v-model="lastName"
                   :counter="10"
-                  :error-messages="getLastNameErrors"
+                  :error-messages="getErrors('lastName')"
                   label="Last Name"
                   required
                   @input="$v.lastName.$touch()"
@@ -31,7 +31,7 @@
               <v-flex xs12>
                 <v-text-field
                   v-model="email"
-                  :error-messages="getEmailErrors"
+                  :error-messages="getErrors('email')"
                   label="Email"
                   required
                   @input="$v.email.$touch()"
@@ -42,7 +42,7 @@
                 <v-select
                   v-model="city"
                   :items="cities"
-                  :error-messages="getCityErrors"
+                  :error-messages="getErrors('city')"
                   label="City"
                   required
                   @input="$v.city.$touch()"
@@ -91,57 +91,50 @@ export default class UserFormDialog extends Vue {
   email: string = '';
   city: string | null = null;
 
+  errorMessages: Object = {
+    required: this.formatErrorMessage`${'field'} is required.`,
+    maxLength: this.formatErrorMessage`${'field'} must be ${'max'} characters.`,
+    email: this.formatErrorMessage`${'field'} must be valid email format.`
+  };
+
+  formatErrorMessage(
+    strings: TemplateStringsArray,
+    ...keys: string[]
+  ): Function {
+    return (...values) => {
+      const dict = values[values.length - 1] || {};
+      const result = [strings[0]];
+      keys.forEach((key, i) => {
+        const value = Number.isInteger(parseInt(key)) ? values[key] : dict[key];
+        result.push(value, strings[i + 1]);
+      });
+      return result.join('');
+    };
+  }
+
   @Action('user/createUser') createUser!: (user: User) => void;
 
-  get getFirstNameErrors(): Array<string> {
+  getErrors(field: string): Array<string> {
     const errors: Array<string> = [];
-    const validation = this.$v.firstName;
+    const validation = this.$v[field];
 
-    if (validation) {
-      if (!validation.$dirty) return errors;
-      !validation['maxLength'] &&
-        errors.push('FirstName must be 10 characters.');
-      !validation['required'] && errors.push('FirstName is required.');
-    }
+    if (!validation || !validation.$dirty) return errors;
 
-    return errors;
-  }
+    Object.keys(validation.$params).forEach(param => {
+      if (!validation[param]) {
+        const errorMessageParams: Object = {
+          field
+        };
 
-  get getLastNameErrors(): Array<string> {
-    const errors: Array<string> = [];
-    const validation = this.$v.lastName;
+        if (validation.$params[param].max) {
+          Object.assign(errorMessageParams, {
+            max: validation.$params[param].max
+          });
+        }
 
-    if (validation) {
-      if (!validation.$dirty) return errors;
-      !validation['maxLength'] &&
-        errors.push('LastName must be 10 characters.');
-      !validation['required'] && errors.push('LastName is required.');
-    }
-
-    return errors;
-  }
-
-  get getEmailErrors(): Array<string> {
-    const errors: Array<string> = [];
-    const validation = this.$v.email;
-
-    if (validation) {
-      if (!validation.$dirty) return errors;
-      !validation['email'] && errors.push('email must be valid format.');
-      !validation['required'] && errors.push('email is required.');
-    }
-
-    return errors;
-  }
-
-  get getCityErrors(): Array<string> {
-    const errors: Array<string> = [];
-    const validation = this.$v.city;
-
-    if (validation) {
-      if (!validation.$dirty) return errors;
-      !validation['required'] && errors.push('city is required.');
-    }
+        errors.push(this.errorMessages[param](errorMessageParams));
+      }
+    });
 
     return errors;
   }
