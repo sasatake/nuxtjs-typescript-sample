@@ -13,17 +13,17 @@
                 <v-icon v-else large>account_circle</v-icon>
               </v-avatar>
             </td>
-            <td>{{ props.item.name }}</td>
+            <td>{{ `${props.item.firstName} ${props.item.lastName}` }}</td>
             <td>{{ props.item.email }}</td>
             <td>{{ props.item.city }}</td>
             <td>{{ props.item.updatedAt | dateTime }}</td>
             <td>
-              <v-icon small @click="alertUser(props.item.name)">
+              <v-icon small @click="editUser(props.item)">
                 edit
               </v-icon>
             </td>
             <td>
-              <v-icon small @click="deleteUser(props.item.name)">
+              <v-icon small @click="deleteUser(props.item.id)">
                 delete
               </v-icon>
             </td>
@@ -36,15 +36,33 @@
           top
           right
           color="pink"
-          @click.stop="dialog = true"
+          @click.stop="createUserFormDialog = true"
         >
           <v-icon>add</v-icon>
         </v-btn>
       </v-card>
     </v-layout>
     <v-layout>
-      <v-dialog v-model="dialog" persistent max-width="50%">
-        <create-user-form title="Create User" @cancel="dialog = false" />
+      <v-dialog v-model="createUserFormDialog" persistent max-width="50%">
+        <user-form-component
+          title="Create User"
+          submit-button-icon="person_add"
+          submit-button-label="Create"
+          @submit="createUser"
+          @cancel="createUserFormDialog = false"
+        />
+      </v-dialog>
+    </v-layout>
+    <v-layout>
+      <v-dialog v-model="editUserFormDialog" persistent max-width="50%">
+        <user-form-component
+          title="Edit User"
+          submit-button-icon="save_alt"
+          submit-button-label="Update"
+          :form="editingUserForm"
+          @submit="updateUser"
+          @cancel="editUserFormDialog = false"
+        />
       </v-dialog>
     </v-layout>
   </v-container>
@@ -54,21 +72,16 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 import { State, Action } from 'vuex-class';
 import { UserState } from '@/types/store';
-import CreateUserForm from '~/components/CreateUserForm.vue';
+import UserFormComponent from '~/components/UserForm.vue';
+import { User, UserForm } from '@/types/models';
+import shortid from 'shortid';
 
 interface Header {
   text: string;
   value: string;
 }
 
-interface Form {
-  firstName: string;
-  lastName: string;
-  email: string;
-  city: string;
-}
-
-@Component({ components: { CreateUserForm } })
+@Component({ components: { UserFormComponent } })
 export default class Index extends Vue {
   headers: Header[] = [
     {
@@ -101,14 +114,59 @@ export default class Index extends Vue {
     }
   ];
 
-  dialog: boolean = false;
+  createUserFormDialog: boolean = false;
+
+  editUserFormDialog: boolean = false;
+
+  editingUser!: User;
+  editingUserForm: UserForm = {
+    firstName: '',
+    lastName: '',
+    city: '',
+    email: ''
+  };
 
   @State user!: UserState;
 
-  @Action('user/deleteUser') deleteUser!: (name: string) => void;
+  @Action('user/createUser') create!: (user: User) => void;
 
-  alertUser(name: string): void {
-    alert(name);
+  @Action('user/updateUser') update!: (user: User) => void;
+
+  @Action('user/deleteUser') deleteUser!: (id: string) => void;
+
+  createUser(userForm: UserForm): void {
+    this.create({
+      id: shortid.generate(),
+      firstName: userForm.firstName,
+      lastName: userForm.lastName,
+      city: userForm.city,
+      email: userForm.email,
+      avatar: '',
+      updatedAt: new Date()
+    });
+  }
+
+  editUser(user: User): void {
+    this.editingUser = user;
+    this.editingUserForm = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      city: user.city,
+      email: user.email
+    };
+    this.editUserFormDialog = true;
+  }
+
+  updateUser(userForm: UserForm): void {
+    this.update({
+      id: this.editingUser.id,
+      firstName: userForm.firstName,
+      lastName: userForm.lastName,
+      city: userForm.city,
+      email: userForm.email,
+      avatar: this.editingUser.avatar,
+      updatedAt: new Date()
+    });
   }
 }
 </script>

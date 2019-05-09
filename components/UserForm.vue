@@ -58,7 +58,8 @@
             <v-icon small>clear</v-icon>&thinsp;Cancel
           </v-btn>
           <v-btn color="success" @click="submit">
-            <v-icon small>person_add</v-icon>&thinsp;Create
+            <v-icon small>{{ submitButtonIcon }}</v-icon
+            >&thinsp;{{ submitButtonLabel }}
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -67,10 +68,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator';
+import { Component, Vue, Prop, Watch } from 'nuxt-property-decorator';
 import { required, maxLength, email } from 'vuelidate/lib/validators';
-import { Action } from 'vuex-class';
-import { User } from '@/types/models';
+import { UserForm } from '@/types/models';
 
 @Component({
   validations: {
@@ -83,6 +83,23 @@ import { User } from '@/types/models';
 export default class UserFormDialog extends Vue {
   @Prop()
   title!: string;
+
+  @Prop()
+  form!: UserForm;
+
+  @Prop()
+  submitButtonLabel!: string;
+
+  @Prop()
+  submitButtonIcon!: string;
+
+  @Watch('form')
+  setUserForEdit(form: UserForm): void {
+    this.firstName = form.firstName;
+    this.lastName = form.lastName;
+    this.email = form.email;
+    this.city = form.city;
+  }
 
   cities: Array<string> = ['Tokyo', 'Osaka', 'New York', 'London'];
 
@@ -111,8 +128,6 @@ export default class UserFormDialog extends Vue {
       return result.join('');
     };
   }
-
-  @Action('user/createUser') createUser!: (user: User) => void;
 
   getErrors(field: string): Array<string> {
     const errors: Array<string> = [];
@@ -143,14 +158,13 @@ export default class UserFormDialog extends Vue {
     this.$v.$touch();
 
     if (!this.$v.$invalid) {
-      const newUser: User = {
-        name: `${this.firstName} ${this.lastName}`,
+      const validUserForm: UserForm = {
+        firstName: this.firstName,
+        lastName: this.lastName,
         city: this.city ? this.city : '',
-        email: this.email,
-        avatar: '',
-        updatedAt: new Date()
+        email: this.email
       };
-      this.createUser(newUser);
+      this.$emit('submit', validUserForm);
       this.cancel();
     }
   }
