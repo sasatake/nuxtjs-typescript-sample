@@ -1,6 +1,5 @@
 import { createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-import { Store, StoreOptions } from 'vuex';
+import Vuex, { Store, StoreOptions } from 'vuex';
 import { User } from '@/types/models';
 import { UserState } from '@/types/store';
 import { cloneDeep } from 'lodash';
@@ -44,23 +43,29 @@ describe('store/actions', () => {
 
   describe('createUser', () => {
     test('user is added to State', async () => {
-      expect(store.state.users.find(user => user.id == userId)).toBeUndefined();
+      expect(
+        store.state.users.find(user => user.id === userId)
+      ).toBeUndefined();
       await store.dispatch('createUser', user);
-      expect(store.state.users.find(user => user.id == userId)).toEqual(user);
+      expect(store.state.users.find(user => user.id === userId)).toEqual(user);
     });
   });
 
   describe('updateUser', () => {
     test('user is updated', async () => {
       await store.dispatch('updateUser', editedUser);
-      expect(store.state.users.find(user => user.id == userId)).toEqual(editedUser);
+      expect(store.state.users.find(user => user.id === userId)).toEqual(
+        editedUser
+      );
     });
   });
 
   describe('deleteUser', () => {
     test('user is deleted', async () => {
       await store.dispatch('deleteUser', userId);
-      expect(store.state.users.find(user => user.id == userId)).toBeUndefined();
+      expect(
+        store.state.users.find(user => user.id === userId)
+      ).toBeUndefined();
     });
   });
 });

@@ -58,8 +58,8 @@
             <v-icon small>clear</v-icon>&thinsp;Cancel
           </v-btn>
           <v-btn color="success" @click="submit">
-            <v-icon small>{{ submitButtonIcon }}</v-icon
-            >&thinsp;{{ submitButtonLabel }}
+            <v-icon small>{{ submitButtonIcon }}</v-icon>
+            &thinsp;{{ submitButtonLabel }}
           </v-btn>
         </v-card-actions>
       </v-form>

@@ -18,14 +18,10 @@
             <td>{{ props.item.city }}</td>
             <td>{{ props.item.updatedAt | dateTime }}</td>
             <td>
-              <v-icon small @click="editUser(props.item)">
-                edit
-              </v-icon>
+              <v-icon small @click="editUser(props.item)">edit</v-icon>
             </td>
             <td>
-              <v-icon small @click="deleteUser(props.item.id)">
-                delete
-              </v-icon>
+              <v-icon small @click="deleteUser(props.item.id)">delete</v-icon>
             </td>
           </template>
         </v-data-table>
@@ -72,7 +68,7 @@
 import { Component, Vue } from 'nuxt-property-decorator';
 import { State, Action } from 'vuex-class';
 import { UserState } from '@/types/store';
-import UserFormComponent from '~/components/UserForm.vue';
+import UserFormComponent from '@/components/UserForm.vue';
 import { User, UserForm } from '@/types/models';
 import shortid from 'shortid';
 
