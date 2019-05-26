@@ -1,9 +1,13 @@
 import { shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Index from '@/pages/index.vue';
-import localVue from '../helper/getLocalVue';
+import setPlugin from '../helper/setPlugin';
 
 describe('Component', () => {
+  beforeAll(() => {
+    setPlugin();
+  });
+
   test('is a Vue instance', () => {
     const users = [
       {
@@ -17,7 +21,6 @@ describe('Component', () => {
       }
     ];
     const wrapper = shallowMount(Index, {
-      localVue,
       store: new Vuex.Store({
         modules: {
           user: {
